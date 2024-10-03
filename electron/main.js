@@ -23,6 +23,15 @@ const db = new sqlite3.Database("./sqlite.db", (err) => {
       }
     }
   );
+
+  db.run(
+    "CREATE TABLE IF NOT EXISTS classrooms (id INTEGER PRIMARY KEY, name TEXT)",
+    (err) => {
+      if (err) {
+        console.error("Error creating classrooms table: ", err.message);
+      }
+    }
+  );
 });
 
 // Function to create the main window
@@ -68,6 +77,33 @@ ipcMain.handle("get-users", async () => {
         reject(err);
       } else {
         resolve(rows); // Send the user data to the renderer
+      }
+    });
+  });
+});
+
+// IPC communication to insert a new user into the database
+ipcMain.handle("add-user", async (event, userName) => {
+  return new Promise((resolve, reject) => {
+    db.run("INSERT INTO users (name) VALUES (?)", [userName], function (err) {
+      if (err) {
+        console.error("Error adding user: ", err.message);
+        reject(err);
+      } else {
+        resolve({ id: this.lastID, name: userName }); // Return new user data
+      }
+    });
+  });
+});
+
+ipcMain.handle("get-classrooms", async () => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM classrooms", [], (err, rows) => {
+      if (err) {
+        console.error("Error fetching classrooms: ", err.message);
+        reject(err);
+      } else {
+        resolve(rows);
       }
     });
   });
