@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from "react";
 import ClassroomRegistration from "./ClassroomRegistration";
+import StudentRegistration from "./StudentRegistration";
+import TeacherRegistration from "./TeacherRegistration";
 
 function App() {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState("");
+  const [classrooms, setClassrooms] = useState([]);
 
   useEffect(() => {
     loadUsers();
+    loadClassrooms();
   }, []);
+
+  const loadClassrooms = () => {
+    if (window.database) {
+      window.database
+        .getClassrooms()
+        .then((data) => {
+          setClassrooms(data);
+        })
+        .catch((error) => console.error("Failed to load classrooms:", error));
+    }
+  };
 
   // Function to load users from the database
   const loadUsers = () => {
@@ -57,6 +72,8 @@ function App() {
       </form>
 
       <ClassroomRegistration />
+      <StudentRegistration classrooms={classrooms} />
+      <TeacherRegistration classrooms={classrooms} />
     </div>
   );
 }

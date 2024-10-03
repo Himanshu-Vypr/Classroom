@@ -21,23 +21,23 @@ function ClassroomRegistration() {
     }
   };
 
-  //   const handleSubmit = (event) => {
-  //     event.preventDefault();
-  //     if (window.database) {
-  //       window.database
-  //         .addClassroom(classroomName)
-  //         .then(() => {
-  //           loadClassrooms();
-  //           setClassroomName("");
-  //         })
-  //         .catch((error) => console.error("Failed to add classroom:", error));
-  //     }
-  //   };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (window.database) {
+      window.database
+        .addClassroom(classroomName)
+        .then(() => {
+          loadClassrooms();
+          setClassroomName("");
+        })
+        .catch((error) => console.error("Failed to add classroom:", error));
+    }
+  };
 
   return (
     <div className={styles.container}>
       <h2>Classroom Registration</h2>
-      {/* <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Classroom Name"
@@ -45,7 +45,7 @@ function ClassroomRegistration() {
           onChange={(e) => setClassroomName(e.target.value)}
         />
         <button type="submit">Add Classroom</button>
-      </form> */}
+      </form>
 
       <h3>Existing Classrooms</h3>
       <ul>

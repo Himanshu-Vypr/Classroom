@@ -32,6 +32,24 @@ const db = new sqlite3.Database("./sqlite.db", (err) => {
       }
     }
   );
+
+  db.run(
+    "CREATE TABLE IF NOT EXISTS students (id INTEGER PRIMARY KEY, name TEXT, address TEXT, rollNumber TEXT, classroomId INTEGER, FOREIGN KEY (classroomId) REFERENCES classrooms (id))",
+    (err) => {
+      if (err) {
+        console.error("Error creating students table: ", err.message);
+      }
+    }
+  );
+
+  db.run(
+    "CREATE TABLE IF NOT EXISTS teachers (id INTEGER PRIMARY KEY, name TEXT, address TEXT, classroomId INTEGER, subject TEXT, FOREIGN KEY (classroomId) REFERENCES classrooms (id))",
+    (err) => {
+      if (err) {
+        console.error("Error creating teachers table: ", err.message);
+      }
+    }
+  );
 });
 
 // Function to create the main window
@@ -106,6 +124,62 @@ ipcMain.handle("get-classrooms", async () => {
         resolve(rows);
       }
     });
+  });
+});
+
+// Add a new classroom
+ipcMain.handle("add-classroom", async (event, classroomName) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "INSERT INTO classrooms (name) VALUES (?)",
+      [classroomName],
+      function (err) {
+        if (err) {
+          console.error("Error adding classroom: ", err.message);
+          reject(err);
+        } else {
+          resolve({ id: this.lastID, name: classroomName });
+        }
+      }
+    );
+  });
+});
+
+// Add a new student
+ipcMain.handle("add-student", async (event, studentData) => {
+  return new Promise((resolve, reject) => {
+    const { name, address, rollNumber, classroomId } = studentData;
+    db.run(
+      "INSERT INTO students (name, address, rollNumber, classroomId) VALUES (?, ?, ?, ?)",
+      [name, address, rollNumber, classroomId],
+      function (err) {
+        if (err) {
+          console.error("Error adding student: ", err.message);
+          reject(err);
+        } else {
+          resolve({ id: this.lastID, name, address, rollNumber, classroomId });
+        }
+      }
+    );
+  });
+});
+
+// Add a new teacher
+ipcMain.handle("add-teacher", async (event, teacherData) => {
+  return new Promise((resolve, reject) => {
+    const { name, address, classroomId, subject } = teacherData;
+    db.run(
+      "INSERT INTO teachers (name, address, classroomId, subject) VALUES (?, ?, ?, ?)",
+      [name, address, classroomId, subject],
+      function (err) {
+        if (err) {
+          console.error("Error adding teacher: ", err.message);
+          reject(err);
+        } else {
+          resolve({ id: this.lastID, name, address, classroomId, subject });
+        }
+      }
+    );
   });
 });
 

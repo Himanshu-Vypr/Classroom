@@ -17,6 +17,11 @@ contextBridge.exposeInMainWorld("database", {
   getUsers: async () => await ipcRenderer.invoke("get-users"), // Securely invoke the IPC method
   addUser: async (name) => await ipcRenderer.invoke("add-user", name), // Expose addUser
   getClassrooms: async () => await ipcRenderer.invoke("get-classrooms"),
+  addClassroom: async (name) => await ipcRenderer.invoke("add-classroom", name),
+  addStudent: async (studentData) =>
+    await ipcRenderer.invoke("add-student", studentData),
+  addTeacher: async (teacherData) =>
+    await ipcRenderer.invoke("add-teacher", teacherData),
 });
 
 console.log("Preload script loaded.");
