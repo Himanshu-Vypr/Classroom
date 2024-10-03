@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import ClassroomRegistration from "./ClassroomRegistration";
 import StudentRegistration from "./StudentRegistration";
 import TeacherRegistration from "./TeacherRegistration";
+import ClassroomView from "./ClassroomView";
 
 function App() {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState("");
   const [classrooms, setClassrooms] = useState([]);
+  const [selectedClassroom, setSelectedClassroom] = useState(null);
 
   useEffect(() => {
     loadUsers();
@@ -74,6 +76,21 @@ function App() {
       <ClassroomRegistration />
       <StudentRegistration classrooms={classrooms} />
       <TeacherRegistration classrooms={classrooms} />
+      <div>
+        <h2>Select Classroom to View</h2>
+        <select
+          value={selectedClassroom}
+          onChange={(e) => setSelectedClassroom(e.target.value)}
+        >
+          <option value="">Select Classroom</option>
+          {classrooms.map((classroom) => (
+            <option key={classroom.id} value={classroom.id}>
+              {classroom.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      {selectedClassroom && <ClassroomView classroomId={selectedClassroom} />}
     </div>
   );
 }

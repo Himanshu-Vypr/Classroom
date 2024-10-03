@@ -183,6 +183,52 @@ ipcMain.handle("add-teacher", async (event, teacherData) => {
   });
 });
 
+// IPC communication to handle database queries from renderer process (React)
+ipcMain.handle("get-classroom-details", async (event, classroomId) => {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      let classroomDetails = {};
+
+      // Fetch the classroom details
+      db.get(
+        "SELECT * FROM classrooms WHERE id = ?",
+        [classroomId],
+        (err, classroom) => {
+          if (err) {
+            return reject(err);
+          }
+          classroomDetails.classroom = classroom;
+        }
+      );
+
+      // Fetch the students in this classroom
+      db.all(
+        "SELECT * FROM students WHERE classroomId = ?",
+        [classroomId],
+        (err, students) => {
+          if (err) {
+            return reject(err);
+          }
+          classroomDetails.students = students;
+        }
+      );
+
+      // Fetch the teachers in this classroom
+      db.all(
+        "SELECT * FROM teachers WHERE classroomId = ?",
+        [classroomId],
+        (err, teachers) => {
+          if (err) {
+            return reject(err);
+          }
+          classroomDetails.teachers = teachers;
+          resolve(classroomDetails); // Resolve after all queries have finished
+        }
+      );
+    });
+  });
+});
+
 // Close the database connection when the app quits
 app.on("quit", () => {
   db.close((err) => {

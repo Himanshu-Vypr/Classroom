@@ -22,6 +22,8 @@ contextBridge.exposeInMainWorld("database", {
     await ipcRenderer.invoke("add-student", studentData),
   addTeacher: async (teacherData) =>
     await ipcRenderer.invoke("add-teacher", teacherData),
+  getClassroomDetails: async (classroomId) =>
+    await ipcRenderer.invoke("get-classroom-details", classroomId),
 });
 
 console.log("Preload script loaded.");
