@@ -1,5 +1,4 @@
-// StudentRegistration.js
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./StudentRegistration.module.css";
 
 function StudentRegistration({ classrooms }) {
@@ -7,9 +6,16 @@ function StudentRegistration({ classrooms }) {
   const [address, setAddress] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [classroomId, setClassroomId] = useState("");
+  const [error, setError] = useState(""); // Error state
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!name || !address || !rollNumber || !classroomId) {
+      setError("All fields must be filled before submitting.");
+      return; // Stop the form submission
+    }
+
     if (window.database) {
       const studentData = { name, address, rollNumber, classroomId };
       window.database
@@ -19,6 +25,7 @@ function StudentRegistration({ classrooms }) {
           setAddress("");
           setRollNumber("");
           setClassroomId("");
+          setError(""); // Clear error on successful submission
         })
         .catch((error) => console.error("Failed to add student:", error));
     }
@@ -59,6 +66,9 @@ function StudentRegistration({ classrooms }) {
         </select>
         <button type="submit">Register Student</button>
       </form>
+
+      {/* Display error message if fields are incomplete */}
+      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 }

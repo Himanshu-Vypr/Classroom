@@ -26,15 +26,15 @@ function ClassroomView({ classroomId }) {
       <h3>Students</h3>
       <ul>
         {classroomDetails.students.map((student) => (
-          <li key={student.id}>
-            {student.name} - Roll No: {student.roll_number}
+          <li key={student.id} className="listView">
+            {student.name} - Roll No: {student.rollNumber}
           </li>
         ))}
       </ul>
       <h3>Teacher</h3>
       <ul>
         {classroomDetails.teachers.map((teacher) => (
-          <li key={teacher.id}>
+          <li key={teacher.id} className="listView">
             {teacher.name} - Subject: {teacher.subject}
           </li>
         ))}

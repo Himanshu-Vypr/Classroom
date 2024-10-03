@@ -54,29 +54,16 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Users List</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
+    <div className="container">
+      <h1 className="homepageHeader">Classroom - Management - Platform</h1>
 
-      <h2>Add New User</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter user name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <button type="submit">Add User</button>
-      </form>
+      <div className="registration-section">
+        <ClassroomRegistration />
+        <StudentRegistration classrooms={classrooms} />
+        <TeacherRegistration classrooms={classrooms} />
+      </div>
 
-      <ClassroomRegistration />
-      <StudentRegistration classrooms={classrooms} />
-      <TeacherRegistration classrooms={classrooms} />
-      <div>
+      <div className="classroom-select">
         <h2>Select Classroom to View</h2>
         <select
           value={selectedClassroom}
@@ -90,9 +77,57 @@ function App() {
           ))}
         </select>
       </div>
+
       {selectedClassroom && <ClassroomView classroomId={selectedClassroom} />}
+
+      <div className="footer">
+        <p>&copy; 2024 Classroom Management Platform</p>
+      </div>
     </div>
   );
+
+  // return (
+  //   <div>
+  //     {/* <h1>Users List</h1>
+  //     <ul>
+  //       {users.map((user) => (
+  //         <li key={user.id}>{user.name}</li>
+  //       ))}
+  //     </ul>
+
+  //     <h2>Add New User</h2>
+  //     <form onSubmit={handleSubmit}>
+  //       <input
+  //         type="text"
+  //         placeholder="Enter user name"
+  //         value={name}
+  //         onChange={(e) => setName(e.target.value)}
+  //       />
+  //       <button type="submit">Add User</button>
+  //     </form> */}
+
+  //     <h1>Classroom - Management - Platform</h1>
+
+  //     <ClassroomRegistration />
+  //     <StudentRegistration classrooms={classrooms} />
+  //     <TeacherRegistration classrooms={classrooms} />
+  //     <div>
+  //       <h2>Select Classroom to View</h2>
+  //       <select
+  //         value={selectedClassroom}
+  //         onChange={(e) => setSelectedClassroom(e.target.value)}
+  //       >
+  //         <option value="">Select Classroom</option>
+  //         {classrooms.map((classroom) => (
+  //           <option key={classroom.id} value={classroom.id}>
+  //             {classroom.name}
+  //           </option>
+  //         ))}
+  //       </select>
+  //     </div>
+  //     {selectedClassroom && <ClassroomView classroomId={selectedClassroom} />}
+  //   </div>
+  // );
 }
 
 export default App;
